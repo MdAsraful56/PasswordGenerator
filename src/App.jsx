@@ -1,5 +1,5 @@
 import './App.css'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 
 function App() {
 
@@ -7,6 +7,10 @@ function App() {
   const [numberAllowed, setNumberAllowed] = useState(false);
   const [charAllowed, setCharAllowed] = useState(false);
   const [password, setPassword] = useState('');
+
+  //useRef hook
+
+  const passwordRef = useRef(null);
 
   const handleGeneratePassword = useCallback(() => {
     let pass = ''
@@ -22,7 +26,12 @@ function App() {
     // console.log(pass);
 
     // setPassword(Array(length).fill(charset).map(x => x[Math.floor(Math.random() * x.length)]).join(''));
-  } , [length, numberAllowed, charAllowed, setPassword]);
+  } , [length, numberAllowed, charAllowed]);
+
+  const copyPasswordToClipboard = useCallback(() => {
+    passwordRef.current.select();
+    window.navigator.clipboard.writeText(password);
+  }, [password]); 
 
   useEffect(() => {
     handleGeneratePassword();
@@ -32,8 +41,8 @@ function App() {
       <div className="w-full max-w-md pb-10 pt-8 mx-auto shadow-md rounded-lg px-4 my-8 text-orange-400 bg-gray-700">
         <h1 className="text-white text-4xl mb-5 text-center font-semibold">Password Generator</h1>
         <div className="flex shadow-lg overflow-hidden mb-4 rounded-lg">
-            <input type="text" value={password} className='font-semibold outline-none w-full py-1 px-3 bg-white text-gray-800' placeholder='Password' readOnly />
-            <button className='outline-none bg-blue-700 text-white px-3 font-medium py-05 shrink-0'>Copy</button>
+            <input type="text" value={password} className='font-semibold outline-none w-full py-1 px-3 bg-white text-gray-800' placeholder='Password' readOnly ref={passwordRef} />
+            <button onClick={copyPasswordToClipboard} className='outline-none bg-blue-700 text-white px-3 font-medium py-05 shrink-0'>Copy</button>
         </div>
         <div className="flex text-sm gap-x-2">
           <div className="flex items-center gap-x-1">
