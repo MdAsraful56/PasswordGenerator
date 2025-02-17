@@ -1,5 +1,5 @@
 import './App.css'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 function App() {
 
@@ -19,10 +19,14 @@ function App() {
         pass += charset.charAt(char)
     }
     setPassword(pass);
-    console.log(pass);
+    // console.log(pass);
 
     // setPassword(Array(length).fill(charset).map(x => x[Math.floor(Math.random() * x.length)]).join(''));
   } , [length, numberAllowed, charAllowed, setPassword]);
+
+  useEffect(() => {
+    handleGeneratePassword();
+  }, [length, numberAllowed, charAllowed, setPassword, handleGeneratePassword]);
 
   return (
       <div className="w-full max-w-md pb-10 pt-8 mx-auto shadow-md rounded-lg px-4 my-8 text-orange-400 bg-gray-700">
